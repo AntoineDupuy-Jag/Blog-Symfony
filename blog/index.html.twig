@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1 style="text-align: center">Liste des articles</h1>
+
+    <hr>
+
+    {% for article in articles %}
+    
+        <article>
+            <h2> {{ article.title }} </h2>
+            <div class="metadata"> Ecrit le {{ article.createdAt | date ('d/m/Y') }} à {{ article.createdAt | date ('H:i') }} dans la catégorie '{{ article.category.title }}'.
+            <span class="badge bg-info" style="margin: 10px;">
+                <i class="far fa-thumbs-up"></i>
+                <span class="js-likes">{{ article.likes | length }}</span>
+                <span class="js-label">J'aime</span>
+            </span>
+            </div>
+            <div class="content">
+                <img src={{ article.image }} alt="">
+                {# Utilisation de notre propre filtre Twig personnalisé -> #}
+                {{ article.content | ArticleBeginning }}
+                <a href="{{ path('blog_show', {'id': article.id}) }}" class="btn btn-primary"> Lire la suite </a>
+                <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-secondary"> Modifier </a>
+            </div>
+        </article><hr>
+
+    {% endfor %}
+
+{% endblock %}

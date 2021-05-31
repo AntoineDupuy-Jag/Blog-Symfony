@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<article>
+		<h1> {{ article.title }} </h1>
+		<div class="metadata">
+				Ecrit le {{ article.createdAt | date ('d/m/Y') }} à {{ article.createdAt | date ('H:i') }} dans la catégorie '{{ article.category.title }}'.
+		</div>
+		<div class="content">
+				<img src="{{ article.image }}" alt="">
+				<hr>
+				{{ article.content | raw }}
+		</div>
+    <br><a href="{{ path('article_like', {'id': article.id}) }}" class="btn btn-light btn-sm js-like" style="color: blue">
+				{% if app.user and article.isLikedByUser(app.user) %}
+						<i class="fas fa-thumbs-up"></i>
+				{% else %}
+						<i class="far fa-thumbs-up"></i>
+				{% endif %}
+        <span class="js-likes"> {{ article.likes | length }} </span>
+        <span class="js-label">J'aime</span>
+    </a>
+		<div>
+				<br><a href="{{ path('blog') }}" class="btn btn-secondary btn-sm">Revenir à la liste des articles</a>
+		</div>
+</article>
+
+{# Affichage des commentaires de l'article -> #}
+<section id="comments">
+		<hr><h2>Commentaires ({{ article.comments | length }})</h2><hr>
+		{% for comment in article.comments %}
+				<div class="comment">
+						<div class="row">
+								<div class="col-3">
+										{{ comment.author }} (<small> Le {{ comment.createdAt | date ('d/m/Y à H:i') }} </small>)
+								</div>
+								<div class="col">
+										{{ comment.content }}
+								</div>
+						</div>
+				</div>
+				<hr>
+		{% endfor %}
+
+		{# Affichage du formulaire commentaire SEULEMENT si l'utilisateur est connecté #}
+		{% if app.user %}
+
+				{# Affichage du formulaire pour ajouter un commentaire #}
+				<h2>Ajouter un commentaire :</h2>
+				{{ form_start(commentForm) }}
+				{{ form_row(commentForm.author, {'attr': {'placeholder': 'Votre nom d\'utilisateur'} }) }}
+				{{ form_row(commentForm.content, {'attr': {'placeholder': 'Votre commentaire', 'rows': '4'} }) }}
+				<hr><button type="submit" class="btn btn-success">Poster</button>
+				{{ form_end(commentForm) }}
+					
+		{% else %}
+
+				<h4>Vous devez être connecté pour poster un commentaire !</h4>
+				<a href="{{ path('security_login') }}" class="btn btn-secondary btn-sm">Se connecter</a>
+				<a href="{{ path('security_registration') }}" class="btn btn-info btn-sm">S'inscrire</a>
+
+		{% endif %}
+
+</section>
+
+{% endblock %}
+
+{#----------------------------------------------------------------------------------#}
+
+{# Block javascripts pour importer axios et utiliser Ajax #}
+{% block javascripts %}
+		
+		{# cf. https://github.com/axios/axios #}
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		
+		<script>
+
+				// Function onClickBtnLike ->
+				function onClickBtnLike(event) {
+						event.preventDefault();
+
+						/*------------------------------------------------------------------------ 
+						|  On récupère les balises que l'on souhaite modifier via querySelector  |
+						------------------------------------------------------------------------*/
+						// *La valeur de this dans une fonction liée à un évènement c'est l'élément html qui déclenche l'évènement, ici <a>
+						const url = this.href;
+						const spanCount = this.querySelector('span.js-likes');
+						const icone = this.querySelector('i');
+
+						/*-------------------------------------------------------------------------------------------------
+						|  Utilisation d'axios pour traiter l'url, attendre la réponse et modifier le contenu des balises |
+						-------------------------------------------------------------------------------------------------*/
+						axios.get(url).then(function (response) {
+								// On récupère le nombre de likes dans l'objet response (envoyer par notre route au format json) ->
+								const likes = response.data.likes;
+								// On envoie ce nombre de likes vers notre variable 'spanCount' qui fait référence à <span class="js-likes"> ->
+								spanCount.textContent = likes;
+								// Remplacement de l'icone en cas de clic par l'utilisateur ->
+								if (icone.classList.contains('fas')) {
+										icone.classList.replace('fas', 'far');
+								} else {
+										icone.classList.replace('far', 'fas');
+								}
+						// Traitement des erreurs ->
+						}).catch(function (error) {
+								if(error.response.status === 403) {
+										window.alert("Vous ne pouvez pas aimer d'articles si vous n'êtes pas connecté !");
+								} else {
+										window.alert("Oups, une erreur est survenue, merci de réessayer ultérieurement...");
+								}
+						})
+				}// EO onClickBtnLike
+
+				// Pour séléctionner toutes les balises <a> de la classe "js-like", boucler dessus et leur appliquer la fonction ci-dessus ->
+				document.querySelectorAll('a.js-like').forEach(function (link) {
+						link.addEventListener('click', onClickBtnLike);
+				})
+
+		</script>
+
+{% endblock %}

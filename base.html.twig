@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+		<head>
+				<meta charset="UTF-8">
+				<title>
+						{% block title %}
+								QooPhee's Blog!
+						{% endblock %}
+				</title>
+				<link href="https://bootswatch.com/5/slate/bootstrap.min.css" rel="stylesheet">
+				<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+				{% block stylesheets %}
+						<style>
+								.contenair {
+										margin: 50px;
+								}
+								.home-list {
+									list-style-type: circle;
+								}
+								.home-list li {
+									margin-bottom: 10px;
+								}
+						</style>
+				{% endblock %}
+		</head>
+
+<body>
+
+		{# --- NAVBAR START --- #}
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+				<div class="container-fluid">
+						<a class="navbar-brand" href="/">Qoophee's Blog</a>
+						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarColor01">
+								<ul class="navbar-nav me-auto">
+										<li class="nav-item">
+												<a class="nav-link active" href="{{ path('home') }}">Home<span class="visually-hidden">(current)</span></a>
+										</li>
+										<li class="nav-item">
+												<a class="nav-link" href="{{ path('blog') }}">Articles</a>
+										</li>
+										<li class="nav-item">
+												<a class="nav-link" href="{{ path('blog_create') }}">Créer un article</a>
+										</li>
+										<li class="nav-item">
+												<a class="nav-link" href="#">À propos</a>
+										</li>
+										{% if not app.user%}
+												<li class="nav-item">
+														<a class="nav-link" href="{{ path('security_login') }}">Se connecter</a>
+												</li>
+										{% else %}
+												<li class="nav-item">
+														<a class="nav-link" href="{{ path('security_logout') }}">Se déconnecter</a>
+												</li>
+										{% endif %}
+								</ul>
+								<form class="d-flex">
+										<input class="form-control me-sm-2" type="text" placeholder="Search">
+										<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+								</form>
+						</div>
+				</div>
+		</nav>
+		{# --- NAVBAR END --- #}
+
+		{# --- CONTENAIR BLOCK --- #}
+		<div class="contenair">
+				{% block body %}{% endblock %}
+		</div>
+
+		{# --- BLOCK JAVASCRIPTS --- #}
+		{% block javascripts %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formArticle 'bootstrap_4_layout.html.twig' %}
+
+
+{% block body %}
+
+    {# Affichage du titre de la page selon le boolean 'editMode' #}
+    <h1 style="text-align: center">
+        {% if editMode %}
+            Modifier l'article
+        {% else %}
+            Ajouter un article 
+        {% endif %}
+    </h1>
+
+    <hr>
+
+    {{ form_start(formArticle) }}
+
+    {{ form_row(formArticle.title) }}
+    {{ form_row(formArticle.category, {'attr': {"class": "form-select"} }) }}
+    {{ form_row(formArticle.content, {'attr': {"placeholder": "Contenu de l'article", "rows": "6"} }) }}
+    {{ form_row(formArticle.image, {'attr': {"placeholder": "URL de l'image d'illustration de l'article"} }) }}
+    <hr>
+    <button type="submit" class="btn btn-success">
+        {% if editMode %}
+            Modifier l'article 
+        {% else %}
+            Ajouter l'article
+        {% endif %}
+    </button>
+
+    {{ form_end(formArticle) }}
+
+{% endblock %}

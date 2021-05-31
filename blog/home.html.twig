@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+		{# Notification de réussite de connexion utilisateur #}
+		{% if app.user %}
+				<div class="alert alert-dismissible alert-success">
+						<strong>Connexion réussie !</strong> Vous êtes désormais connecté en tant que {{ user.username }}</a>.
+				</div><hr>
+		{% endif %}
+
+
+		{# --- HOMEPAGE --- #}
+		<h1 style="text-align: center">Blog d'introduction à Symfony !</h1>
+
+		<hr>
+
+		<p style="text-align: justify;">
+				Ce blog a pour but de s'entrainer et d'assimiler les bases de Symfony : le paramètrage des routes via des contrôleurs, l'affichage des vues via
+				{{ 'twig' | GreenUpText }}
+				et la gestion d'une base de données MySQL grâce à l'outil
+				{{ 'doctrine' | GreenUpText }}
+				!
+		</p>
+
+		<p style="text-align: justify; line-height: 200%;">Les actions mises en places sur ce blog sont les suivantes :
+				<ul class="home-list">
+						<li>
+								Deux contrôleurs ont été créés : 'BlogController' pour la partie blog et 'SecurityController' pour la partie connexion.
+						</li>
+						<li>Importation d'un thème depuis
+								<a href="https://bootswatch.com/">https://bootswatch.com/</a>
+								et intégration du template de base aux vues twig.
+						</li>
+						<li>
+								Création d'une base de données MySQL.
+						</li>
+						<li>
+								Création d'entités <em>(Entity)</em> : Article, Category, Comment et User.
+						</li>
+						<li>
+								Mise en place de relations entre ces entités.
+						</li>
+						<li>
+								Utilisation de l'outil de doctrine {{ 'migration' | GreenUpText}} pour traduire ces entités (classes php) en tables MySQL.
+						</li>
+						<li>
+								Utilisation de l'outil
+								{{'fixtures' | GreenUpText }}
+								et de la librairie
+								{{'faker' | GreenUpText }}
+								pour ajouter de fausses données à ces tables.
+						</li>
+						<li>
+								Création de formulaires grâce à l'outil
+								{{'form' | GreenUpText }}
+								(pour ajouter et modifier des articles, ajouter de nouveaux commentaires, ou s'inscrire au blog) et traitement de ces formulaires avec traduction en base de données.
+						</li>
+						<li>
+								Gestion des connexions via le fichier
+								{{'security.yaml' | GreenUpText }}
+								pour se connecter, se déconnecter ou pour accèder à la partie 'ajouter un commentaire'.
+						</li>
+						<li>
+								Ajout d'une fonction 'Like' avec {{'Ajax' | GreenUpText }} et la librairie {{'axios' | GreenUpText }}, permettant aux utilisateurs connectés de liker ou unliker un article instantanément, sans rafraîchir la page. Ajout d'un compteur de likes à côté de chaque article.
+						</li>
+						<li>
+								Création de {{ 'filtres Twig personnalisÉs' | GreenUpText }}, pour ne pas avoir à taper du code redondant (par exemple des balises html avec leurs classes bootstraps) ou pour appliquer des fonctions php.<br>
+								<strong>Exemple :</strong> {{ 'premier filtre avec la classe info' | TextFilter({'color' : 'info'}) }},
+																					 {{ 'second filtre avec la classe warning' | TextFilter({'color' : 'warning'}) }}
+						</li>
+						<li>
+								Ajout de commentaires détaillés dans les fichiers de l'application sur les méthodes utilisées, les problèmes rencontrés et leurs solutions, avec liens de redirection vers la documentation Symfony.
+						</li>
+						<li>
+								Finitions du visuel, nettoyage du code, etc...
+						</li>
+				</ul>
+		</p>
+
+		<hr>
+
+		<p style="text-align: justify; line-height: 200%;">
+				D'autres améliorations pourraient être mises en place et d'autres fonctionnalités peuvent être ajoutées par la suite. Ce blog constitue juste une base de travail.
+		</p>
+
+{% endblock %}
